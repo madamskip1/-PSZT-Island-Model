@@ -9,9 +9,10 @@ private:
 	double fitness;
 	std::vector<double> values;
 public:
-	Individual(int value);
-	Individual(std::vector<int> values);
+	Individual(double value);
+	Individual(std::vector<double> values);
 	void calculateFitness();
+	double getFitness();
 	double getValue(int dimension);
 	std::vector<double> getValues();
 	void mutate(const double &standardDeviation);

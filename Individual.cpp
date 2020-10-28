@@ -5,13 +5,15 @@
 
 double Individual::boundary = 0;
 
-Individual::Individual(int value) : fitness(0)
+Individual::Individual(double value) : fitness(0)
 {
     values.push_back(value);
+    calculateFitness();
 }
 
-Individual::Individual(std::vector<int> values) : fitness(0), values(values)
+Individual::Individual(std::vector<double> values) : fitness(0), values(values)
 {
+    calculateFitness();
 }
 
 void Individual::calculateFitness()
@@ -32,6 +34,11 @@ void Individual::calculateFitness()
 
 }
 
+double Individual::getFitness()
+{
+    return fitness;
+}
+
 double Individual::getValue(int dimension)
 {
     return values[dimension - 1];
@@ -48,7 +55,7 @@ void Individual::mutate(const double &standardDeviation)
     int dimension = RandomNumber::getInstance()->randomInt(0, dimensions);
 
     values[dimension] += standardDeviation;
-    // calculate fitnesse
+    calculateFitness();
 }
 
 double Individual::sumOfValues()
