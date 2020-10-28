@@ -1,6 +1,5 @@
 #include "Population.h"
-#include <cstdlib>
-#include <ctime>
+#include "RandomNumber.h"
 
 Population::Population(int size, int individualNeedToCross, int mutateChance, double boundary)
 	: populationSize(size), individualNeedToCross(individualNeedToCross), mutateChance(mutateChance), boundary(boundary)
@@ -40,18 +39,19 @@ void Population::killChilds()
 
 void Population::tryMutateAll()
 {
+	RandomNumber* numberGenerator = RandomNumber::getInstance();
+
 	int numberOfIndividuals = individuals.size();
 	double standardDeviation = calculateDeviation();
 	int negation = 1;
 	int number;
-	srand((unsigned)time(0));
 
 	for (int i = 0; i < numberOfIndividuals; i++)
 	{
-		number = (rand() % 100);
+		number = numberGenerator->randomInt(0, 100);
 		if (number < mutateChance)
 		{
-			if ((rand() % 1) == 1)
+			if (numberGenerator->randomInt(0, 1) == 1)
 				negation *= -1;
 
 			individuals[i]->mutate(negation * standardDeviation);

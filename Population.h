@@ -16,7 +16,6 @@ public:
 	void killChilds();
 	void tryMutateAll();
 private:
-	//void crossover(const std::vector<std::shared_ptr<Individual>> &individuals);
 	double calculateDeviation();
 	void generatePopulation();
 };
