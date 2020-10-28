@@ -1,0 +1,2 @@
+islands_number=5
+population_size=10
