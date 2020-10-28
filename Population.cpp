@@ -12,22 +12,31 @@ void Population::crossoverAll()
 {
 	int newIndividuals = individuals.size() / individualNeedToCross;
 	
-	int newValue;
+	double newValue;
 	std::shared_ptr<Individual> individualToAdd;
+	std::vector<double> values;
+
 	for (int i = 0; i < newIndividuals; i++)
 	{
 		newValue = 0;
 		std::shared_ptr<Individual> child;
-
-		for (int j = 0; j < individualNeedToCross; j++)
+		
+		for (int j = 1; j <= dimensions; j++)
 		{
-			individualToAdd = individuals[i * individualNeedToCross + j];
-			newValue += individualToAdd->getValue();
+			newValue = 0;
+
+			for (int k = 0; k < individualNeedToCross; k++)
+			{
+				newValue += individuals[i * individualNeedToCross + k]->getValue(j);
+			}
+
+			newValue /= individualNeedToCross;
+			values.push_back(newValue);
 		}
 
 		newValue /= individualNeedToCross;
 
-		individuals.push_back(std::make_shared<Individual>(newValue));
+		individuals.push_back(std::make_shared<Individual>(values));
 	}
 }
 
@@ -66,12 +75,13 @@ double Population::calculateDeviation()
 	double sqrtOfItem;
 	int numberOfIndividuals = individuals.size();
 	for (int i = 0; i < numberOfIndividuals; i++)
-		avarage += individuals[i]->getValue();
+		avarage += individuals[i]->avgOfValues();
+
 	avarage /= numberOfIndividuals;
 
 	for (int i = 0; i < numberOfIndividuals; i++)
 	{
-		sqrtOfItem = individuals[i]->getValue() - avarage;
+		sqrtOfItem = individuals[i]->avgOfValues() - avarage;
 		variance = +sqrtOfItem * sqrtOfItem;
 	}
 
@@ -84,6 +94,14 @@ double Population::calculateDeviation()
 
 void Population::generatePopulation()
 {
-	
+	RandomNumber* randomNumber = RandomNumber::getInstance();
+	std::vector<double> values;
+
+	for (int i = 0; i < dimensions; i++)
+		values.push_back(randomNumber->randomDouble(-boundary, boundary));
+
+	std::shared_ptr<Individual> newIndividual = std::make_shared<Individual>(values);
+
+	individuals.push_back(newIndividual);
 }
 

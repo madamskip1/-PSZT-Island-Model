@@ -8,6 +8,7 @@ class Population
 	int populationSize;
 	int individualNeedToCross;
 	int mutateChance;
+	int dimensions;
 	double boundary;
 public:
 	Population(int size, int individualNeedToCross, int mutateChance, double boundary);

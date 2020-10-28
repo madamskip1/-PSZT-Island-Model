@@ -1,16 +1,22 @@
 #pragma once
+#include <vector>
+
 class Individual
 {
 public:
 	static double boundary;
 private:
 	double fitness;
-	int value;
+	std::vector<double> values;
 public:
-	//Individual();
 	Individual(int value);
-	//virtual void calculateFitness();
-	int getValue();
+	Individual(std::vector<int> values);
+	void calculateFitness();
+	double getValue(int dimension);
+	std::vector<double> getValues();
 	void mutate(const double &standardDeviation);
+	double sumOfValues();
+	double avgOfValues();
+
 };
 
