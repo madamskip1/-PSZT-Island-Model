@@ -2,8 +2,15 @@
 #include <iostream>
 #include <sstream>
 
-std::string const ConfigInterpreter::POPOULATION_SIZE = "population_size";
-std::string const ConfigInterpreter::ISLANDS_NUMBER = "islands_number";
+const std::string ConfigInterpreter::POPOULATION_SIZE = "population_size";
+const std::string ConfigInterpreter::ISLANDS_NUMBER = "islands_number";
+const std::string ConfigInterpreter::POPULATIONS = "populations";
+const std::string ConfigInterpreter::DIMENSIONS = "dimensions";
+const std::string ConfigInterpreter::BOUNDARY = "boundary";
+const std::string ConfigInterpreter::GENERATIONS = "generations";
+const std::string ConfigInterpreter::TO_CROSS = "tocross";
+const std::string ConfigInterpreter::MUTATE = "mutate_chance";
+
 
 ConfigInterpreter::ConfigInterpreter(std::string fileName) : fileName(fileName)
 {

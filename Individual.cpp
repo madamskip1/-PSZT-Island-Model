@@ -1,6 +1,7 @@
 #include "Individual.h"
 #include <cmath>
 #include "RandomNumber.h"
+#include <iostream>
 #define PI 3.14159265358979323846
 
 double Individual::boundary = 0;
@@ -9,6 +10,7 @@ Individual::Individual(double value) : fitness(0)
 {
     values.push_back(value);
     calculateFitness();
+    std::cout << fitness << std::endl;
 }
 
 Individual::Individual(std::vector<double> values) : fitness(0), values(values)
@@ -32,6 +34,7 @@ void Individual::calculateFitness()
 
      result += 10 * dimensions;
 
+     fitness = result;
 }
 
 double Individual::getFitness()
@@ -44,32 +47,23 @@ double Individual::getValue(int dimension)
     return values[dimension - 1];
 }
 
+void Individual::setValue(int dimension, double value)
+{
+    values[dimension - 1] = value;
+    calculateFitness();
+}
+
 std::vector<double> Individual::getValues()
 {
     return values;
 }
 
-void Individual::mutate(const double &standardDeviation)
+void Individual::mutate(const double & mutateOp)
 {
     int dimensions = values.size() - 1;
-    int dimension = RandomNumber::getInstance()->randomInt(0, dimensions);
-
-    values[dimension] += standardDeviation;
+    for (int i = 0; i < dimensions; i++)
+    {
+        values[i] += mutateOp;
+    }
     calculateFitness();
-}
-
-double Individual::sumOfValues()
-{
-    double result;
-    for (int i = 0; i < values.size(); i++)
-        result += values[i];
-
-    return result;
-}
-
-double Individual::avgOfValues()
-{
-    double result = sumOfValues();
-
-    return result / values.size();
 }

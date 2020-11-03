@@ -8,6 +8,13 @@ class ConfigInterpreter
 public:
 	static const std::string POPOULATION_SIZE;
 	static const std::string ISLANDS_NUMBER;
+	static const std::string POPULATIONS;
+	static const std::string DIMENSIONS;
+	static const std::string BOUNDARY;
+	static const std::string GENERATIONS;
+	static const std::string TO_CROSS;
+	static const std::string MUTATE;
+
 
 	ConfigInterpreter(std::string fileName);
 	int getConfigValue(const std::string& configName);

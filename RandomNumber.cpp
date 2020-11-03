@@ -13,10 +13,11 @@ RandomNumber* RandomNumber::getInstance()
     return _instance;
 }
 
+
+
 RandomNumber::RandomNumber()
 {
     mt = std::mt19937_64(randomDevice());
-
 }
 
 int RandomNumber::randomInt(int min, int max)

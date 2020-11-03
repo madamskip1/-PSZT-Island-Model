@@ -11,13 +11,12 @@ private:
 public:
 	Individual(double value);
 	Individual(std::vector<double> values);
-	void calculateFitness();
 	double getFitness();
 	double getValue(int dimension);
+	void setValue(int dimension, double value);
 	std::vector<double> getValues();
-	void mutate(const double &standardDeviation);
-	double sumOfValues();
-	double avgOfValues();
-
+	void mutate(const double & mutateOp);
+private:
+	void calculateFitness();
 };
 
