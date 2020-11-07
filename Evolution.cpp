@@ -1,7 +1,7 @@
 #include "Evolution.h"
 #include "ConfigInterpreter.h"
 #include <iostream>
-
+#include <unistd.h>
 Evolution::Evolution()
 {
 	config = new ConfigInterpreter("config.txt");
@@ -26,13 +26,16 @@ void Evolution::run()
 		for (int population = 0; population < populationsSize; population++)
 		{
 			tempPopulation = populations[population];
+			tempPopulation->sortIndividuals();
+			tempPopulation->leaveBest();
 			tempPopulation->crossoverAll();
 			tempPopulation->tryMutateAll();
-			tempPopulation->sortIndividuals();
 			tempPopulation->killChilds();
 
-			if (generation % 1000 == 0)
-			std::cout << "Generacja numer: " << generation << ". Najlepsze dopasowanie: " << tempPopulation->getBestFitness() << std::endl;
+			// usleep(10000);
+			if ((generation -1) % 500 == 0)
+			{std::cout << "Generacja numer: " << generation << ". Najlepsze dopasowanie: " << tempPopulation->getBestFitness() << std::endl;
+			}
 		}
 	}
 	

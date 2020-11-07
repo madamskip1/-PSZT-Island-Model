@@ -58,12 +58,13 @@ std::vector<double> Individual::getValues()
     return values;
 }
 
-void Individual::mutate(const double & mutateOp)
+std::shared_ptr<Individual> Individual::mutate(const double & mutateOp)
 {
-    int dimensions = values.size() - 1;
+    int dimensions = values.size();
     for (int i = 0; i < dimensions; i++)
     {
         values[i] += mutateOp;
     }
     calculateFitness();
+    return std::make_shared<Individual>(values);
 }

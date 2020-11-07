@@ -1,6 +1,5 @@
 #include <algorithm>
 #include "Population.h"
-
 #include <iostream>
 
 Population::Population(int size, int mutateChance, double boundary, int dimensions)
@@ -17,10 +16,18 @@ Population::~Population()
 }
 void Population::crossoverAll()
 {
-	for (int i = 0; i < populationSize; i = i + 2)
+	crossoveredPos = individuals.size();
+	for (int i = 0; i < populationSize * crossoverPercentage/2/100; i = i + 2)
 	{
 		individuals.push_back(crossover(individuals[i], individuals[i + 1]));
 	}
+	for (int i = 0; i < populationSize * crossoverPercentage/2/100; i = i + 2)
+	{
+		int a = randomNumber->randomInt(0, populationSize);
+		int b = randomNumber->randomInt(0, populationSize);
+		individuals.push_back(crossover(individuals[a], individuals[b]));
+	}
+	crossoveredCount = individuals.size() - crossoveredPos;
 }
 
 std::shared_ptr<Individual> Population::crossover(const std::shared_ptr<Individual>& parent1, const std::shared_ptr<Individual>& parent2)
@@ -28,11 +35,15 @@ std::shared_ptr<Individual> Population::crossover(const std::shared_ptr<Individu
 	double weight = randomNumber->randomDouble(0, 1);
 	std::vector<double> values;
 	double val;
-	for (int i = 1; i <= dimensions; i++)
+	for (int i=0; i<weight*dimensions;++i)
 	{
-		val = parent1->getValue(i) * weight + parent2->getValue(i) * (1 - weight);
-		values.push_back(val);
+		values.push_back(parent1->getValue(i));
 	}
+	for (int i=weight*dimensions; i<dimensions;++i)
+	{
+		values.push_back(parent2->getValue(i));
+	}
+
 
 	return std::make_shared<Individual>(values);
 }
@@ -40,27 +51,37 @@ std::shared_ptr<Individual> Population::crossover(const std::shared_ptr<Individu
 
 void Population::killChilds()
 {
-	individuals.resize(populationSize);
+
+	std::vector<std::shared_ptr<Individual>> indivs;
+	indivs.insert(indivs.end(), std::make_move_iterator(individuals.begin() + populationSize), std::make_move_iterator(individuals.end()));
+	individuals = std::move(indivs);
 }
+
+void Population::show(int a)
+{
+	for(auto p : individuals[a].get()->getValues())
+		std::cout<<p<<" ";
+}
+
 
 void Population::tryMutateAll()
 {
 
 	std::random_device rd{};
 	std::mt19937 gen{ rd() };
-	std::normal_distribution<double> normal(0.0, 1);
-	double mutateOp = 0.1 * normal(gen);
+	std::normal_distribution<double> normal(0, 1);
+	double mutateOp = 0.01 * normal(gen);
 
 	int numberOfIndividuals = individuals.size();
-	int number;
-
-	for (int i = 0; i < numberOfIndividuals; i++)
+	uint diff = individuals.size();
+	for (int i=crossoveredPos; i<crossoveredPos+crossoveredCount; ++i)
 	{
-		number = randomNumber->randomInt(0, 1000);
-		if (number <= mutateChance)
-		{
-			individuals[i]->mutate(mutateOp);
-		}
+		individuals.push_back(individuals[i]->mutate(mutateOp));
+	}
+	diff = individuals.size() - diff;
+	for (int i=bestCount+crossoveredCount + diff; i< populationSize; ++i)
+	{
+		individuals.push_back(individuals[i]->mutate(mutateOp));
 	}
 }
 
@@ -92,5 +113,20 @@ void Population::sortIndividuals()
 		{
 			return first->getFitness() < second->getFitness();
 		});
+
+
+		puts("\n\n\n\n");
+	for(auto aa : individuals)
+		printf("%f ", aa.get()->getFitness());
+}
+
+void Population::leaveBest()
+{
+	bestPos = individuals.size();
+	for (int i = 0; i < populationSize * bestPercentage/100; ++i)
+	{
+		individuals.push_back(std::make_shared<Individual>(individuals[i].get()->getValues()));
+	}
+	bestCount = individuals.size() - bestPos;
 }
 
