@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <memory>
 
 class Individual
 {
@@ -15,7 +16,7 @@ public:
 	double getValue(int dimension);
 	void setValue(int dimension, double value);
 	std::vector<double> getValues();
-	void mutate(const double & mutateOp);
+	std::shared_ptr<Individual> mutate(const double & mutateOp);
 private:
 	void calculateFitness();
 };
