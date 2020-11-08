@@ -12,6 +12,7 @@ private:
 public:
 	RandomNumber(RandomNumber& clone) = delete;
 	static RandomNumber *getInstance();
+	virtual ~RandomNumber();
 
 	int randomInt(int min, int max);
 	double randomDouble(double min, double max);

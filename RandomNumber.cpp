@@ -13,7 +13,10 @@ RandomNumber* RandomNumber::getInstance()
     return _instance;
 }
 
-
+RandomNumber::~RandomNumber()
+{
+    delete _instance;
+}
 
 RandomNumber::RandomNumber()
 {
@@ -22,7 +25,6 @@ RandomNumber::RandomNumber()
 
 int RandomNumber::randomInt(int min, int max)
 {
-    //return (rand() % max) + min;
     std::uniform_int_distribution<> distribution(min, max);
     return distribution(mt);
 }

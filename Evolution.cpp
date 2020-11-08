@@ -18,7 +18,10 @@ Evolution::~Evolution()
 void Evolution::run()
 {
 	int populationsSize = populations.size();
-	populations[0]->sortIndividuals();
+	for(auto population : populations)
+	{
+		population->sortIndividuals();
+	}
 	std::shared_ptr<Population> tempPopulation;
 
 	for (int generation = 1; generation <= maxGeneration; generation++)
@@ -29,17 +32,25 @@ void Evolution::run()
 			tempPopulation->sortIndividuals();
 			tempPopulation->leaveBest();
 			tempPopulation->crossoverAll();
+			tempPopulation->killChildren();
 			tempPopulation->tryMutateAll();
-			tempPopulation->killChilds();
 
-			// usleep(10000);
-			if ((generation -1) % 500 == 0)
-			{std::cout << "Generacja numer: " << generation << ". Najlepsze dopasowanie: " << tempPopulation->getBestFitness() << std::endl;
 			}
+
+			if (generation % 10 == 0)
+			{
+				std::cout<<generation<<";";
+				for(int i=0; i<2; ++i)
+				{
+				std::cout << i << ";"
+						  << populations[i]->getBestFitness() << ";"
+						  << populations[i]->getWorstFitness() << ";";
+				}
+				std::cout<<std::endl;
 		}
+		if(generation % 5)
+			MigrateAll();
 	}
-	
-	std::cout << tempPopulation->getBestFitness();
 }
 
 void Evolution::generatePopulations()
@@ -56,5 +67,14 @@ void Evolution::generatePopulations()
 	{
 		temp = std::make_shared<Population>(populations_size, mutate, boundary, dimensions);
 		populations.push_back(temp);
+	}
+}
+
+void Evolution::MigrateAll()
+{
+	for(int i=0;i < amountOfPopoulations-3 ;++i)
+	{
+		populations[i%(amountOfPopoulations-3)+1]->migration(*populations[i%(amountOfPopoulations-3)+2]);
+		populations[i%(amountOfPopoulations-3)+2]->migration(*populations[i%(amountOfPopoulations-3)+1]);
 	}
 }

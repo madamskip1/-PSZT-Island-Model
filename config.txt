@@ -1,6 +1,6 @@
 population_size=100
-generations=100000
-populations=1
-dimensions=500
-boundary=7
-mutate_chance=1
+generations=10000
+populations=9
+dimensions=50
+boundary=5
+mutate_chance=10

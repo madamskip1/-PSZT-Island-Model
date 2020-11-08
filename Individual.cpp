@@ -44,12 +44,12 @@ double Individual::getFitness()
 
 double Individual::getValue(int dimension)
 {
-    return values[dimension - 1];
+    return values[dimension];
 }
 
 void Individual::setValue(int dimension, double value)
 {
-    values[dimension - 1] = value;
+    values[dimension] = value;
     calculateFitness();
 }
 
@@ -58,13 +58,13 @@ std::vector<double> Individual::getValues()
     return values;
 }
 
-std::shared_ptr<Individual> Individual::mutate(const double & mutateOp)
+void Individual::mutate(const double & mutateOp, int position)
 {
-    int dimensions = values.size();
-    for (int i = 0; i < dimensions; i++)
-    {
-        values[i] += mutateOp;
-    }
+    values[position] += mutateOp;
     calculateFitness();
-    return std::make_shared<Individual>(values);
+}
+
+void Individual::migrate(const Individual& other)
+{
+    values = other.values;
 }

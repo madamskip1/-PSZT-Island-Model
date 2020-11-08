@@ -8,7 +8,6 @@ class Evolution
 public:
 	double bestFtiness;
 	ConfigInterpreter* config;
-	//int generation;
 	int maxGeneration;
 
 	Evolution();
@@ -21,6 +20,7 @@ private:
 	std::vector<std::shared_ptr<Population>> populations;
 	int amountOfPopoulations;
 
+	void MigrateAll();
 	void generatePopulations();
 };
 

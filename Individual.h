@@ -16,7 +16,8 @@ public:
 	double getValue(int dimension);
 	void setValue(int dimension, double value);
 	std::vector<double> getValues();
-	std::shared_ptr<Individual> mutate(const double & mutateOp);
+	void mutate(const double & mutateOp, int position);
+	void migrate(const Individual& other);
 private:
 	void calculateFitness();
 };
