@@ -54,7 +54,8 @@ std::shared_ptr<Individual> Population::crossover(const std::shared_ptr<Individu
 
 void Population::killChildren()
 {
-	individuals.erase(individuals.begin(), individuals.end() - 100);
+	individuals.erase(individuals.begin(), individuals.end() - populationSize);
+	individuals.resize(populationSize);
 }
 
 void Population::tryMutateAll()
@@ -130,7 +131,7 @@ void Population::migration(std::shared_ptr<Population> other)
 	for(int i=0; i<migration; ++i)
 	{
 		a = randomNumber->randomInt(0, populationSize-1);
-		b = randomNumber->randomInt(0, (bestPercentage*populationSize/100)-1);
+		b = randomNumber->randomInt(bestPercentage*populationSize/100, populationSize-1);
 		individuals[a]->setValues(other->getIndividual(b)->getValues());
 	}
 }

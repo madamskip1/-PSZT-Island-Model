@@ -27,6 +27,18 @@ void Evolution::run()
 
 	for (int generation = 1; generation <= maxGeneration; generation++)
 	{
+		if (generation % 25 == 0)
+		{
+			std::cout<< "Generation: " << generation;
+			for(int i = 0; i < 2; ++i)
+			{
+			std::cout   << ", Population: " <<i << ", best fit: "
+						<< populations[i]->getBestFitness() << ", worst fit: "
+						<< populations[i]->getWorstFitness();
+			}
+			std::cout<<std::endl;
+		}
+
 		for (int population = 0; population < populationsSize; population++)
 		{
 			tempPopulation = populations[population];
@@ -36,18 +48,6 @@ void Evolution::run()
 			tempPopulation->killChildren();
 			tempPopulation->tryMutateAll();
 			tempPopulation->sortIndividuals();
-		}
-
-		if (generation % 10 == 0)
-		{
-			std::cout<<generation<<";";
-			for(int i = 0; i < 2; ++i)
-			{
-			std::cout << i << ";"
-						<< populations[i]->getBestFitness() << ";"
-						<< populations[i]->getWorstFitness() << ";";
-			}
-			std::cout<<std::endl;
 		}
 
 		if (generation % 5)

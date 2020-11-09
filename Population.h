@@ -6,9 +6,9 @@
 
 class Population
 {
-	static constexpr int crossoverPercentage{90};
-	static constexpr int bestPercentage{10};
-	static constexpr int migrationSize{3};
+	static constexpr int crossoverPercentage{96};
+	static constexpr int bestPercentage{4};
+	static constexpr int migrationSize{1};
 	
 	
 	std::vector<std::shared_ptr<Individual>> individuals;
