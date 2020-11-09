@@ -53,6 +53,11 @@ void Individual::setValue(int dimension, double value)
     calculateFitness();
 }
 
+void Individual::setValues(std::vector<double> values)
+{
+    this->values = values;
+}
+
 std::vector<double> Individual::getValues()
 {
     return values;

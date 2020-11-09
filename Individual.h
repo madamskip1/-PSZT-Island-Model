@@ -15,6 +15,7 @@ public:
 	double getFitness();
 	double getValue(int dimension);
 	void setValue(int dimension, double value);
+	void setValues(std::vector<double> values);
 	std::vector<double> getValues();
 	void mutate(const double & mutateOp, int position);
 	void migrate(const Individual& other);

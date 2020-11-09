@@ -1,5 +1,5 @@
-#include <algorithm>
 #include "Population.h"
+#include <algorithm>
 #include <iostream>
 
 Population::Population(int size, int mutateChance, double boundary, int dimensions)
@@ -36,11 +36,13 @@ std::shared_ptr<Individual> Population::crossover(const std::shared_ptr<Individu
 	double weight = randomNumber->randomDouble(0, 1);
 	std::vector<double> values;
 	double val;
-	for (int i=0; i<weight*dimensions;++i)
+	int half = weight * dimensions;
+
+	for (int i = 0; i < half; ++i)
 	{
 		values.push_back(parent1->getValue(i));
 	}
-	for (int i=weight*dimensions; i<dimensions;++i)
+	for (int i = half; i < dimensions; ++i)
 	{
 		values.push_back(parent2->getValue(i));
 	}
@@ -52,10 +54,7 @@ std::shared_ptr<Individual> Population::crossover(const std::shared_ptr<Individu
 
 void Population::killChildren()
 {
-
-	std::vector<std::shared_ptr<Individual>> indivs;
-	indivs.insert(indivs.end(), std::make_move_iterator(individuals.end() - populationSize), std::make_move_iterator(individuals.end()));
-	individuals = std::move(indivs);
+	individuals.erase(individuals.begin(), individuals.end() - 100);
 }
 
 void Population::tryMutateAll()
@@ -119,11 +118,11 @@ void Population::leaveBest()
 {
 	for (int i = 0; i < populationSize * bestPercentage/100; ++i)
 	{
-		individuals.push_back(std::make_shared<Individual>(individuals[i].get()->getValues()));
+		individuals.push_back(std::make_shared<Individual>(individuals[i]->getValues()));
 	}
 }
 
-void Population::migration(Population& other)
+void Population::migration(std::shared_ptr<Population> other)
 {
 	int migration = randomNumber->randomInt(0, migrationSize);
 	int a;
@@ -132,11 +131,11 @@ void Population::migration(Population& other)
 	{
 		a = randomNumber->randomInt(0, populationSize-1);
 		b = randomNumber->randomInt(0, (bestPercentage*populationSize/100)-1);
-		individuals[a]->migrate(*other.getIndividual(b).get());
+		individuals[a]->setValues(other->getIndividual(b)->getValues());
 	}
 }
 
-std::shared_ptr<Individual> Population::getIndividual(uint position)
+std::shared_ptr<Individual> Population::getIndividual(int position)
 {
 	return individuals[position];
 }
