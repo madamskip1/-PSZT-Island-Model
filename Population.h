@@ -22,7 +22,7 @@ public:
 	Population(int size, int mutateChance, double boundary, int dimensions);
 	~Population();
 	void crossoverAll();
-	void killChildren();
+	void killPredecessors();
 	void tryMutateAll();
 	double getBestFitness();
 	double getWorstFitness();

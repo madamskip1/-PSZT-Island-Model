@@ -45,7 +45,7 @@ void Evolution::run()
 			
 			tempPopulation->leaveBest();
 			tempPopulation->crossoverAll();
-			tempPopulation->killChildren();
+			tempPopulation->killPredecessors();
 			tempPopulation->tryMutateAll();
 			tempPopulation->sortIndividuals();
 		}

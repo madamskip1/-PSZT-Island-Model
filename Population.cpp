@@ -52,9 +52,9 @@ std::shared_ptr<Individual> Population::crossover(const std::shared_ptr<Individu
 }
 
 
-void Population::killChildren()
+void Population::killPredecessors()
 {
-	individuals.erase(individuals.begin(), individuals.end() - populationSize);
+	individuals.erase(individuals.begin(), individuals.begin() + populationSize);
 	individuals.resize(populationSize);
 }
 
