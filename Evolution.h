@@ -6,13 +6,13 @@
 class Evolution
 {
 public:
-	double bestFtiness;
-	ConfigInterpreter* config;
-	int maxGeneration;
+	ConfigInterpreter* config{nullptr};
+	double bestFtiness{0};
+	int maxGeneration{0};
+	int migrationPeriod{0};
 
 	Evolution();
 	~Evolution();
-
 
 	void run();
 
@@ -23,4 +23,5 @@ private:
 	void MigrateAll();
 	void generatePopulations();
 };
+
 

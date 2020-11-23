@@ -21,5 +21,7 @@ public:
 	void migrate(const Individual& other);
 private:
 	void calculateFitness();
+	void rastrigin();
+	void ackley();
 };
 

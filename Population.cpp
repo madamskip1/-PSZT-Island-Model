@@ -1,10 +1,16 @@
 #include "Population.h"
+#include "ConfigInterpreter.h"
 #include <algorithm>
 #include <iostream>
 
 Population::Population(int size, int mutateChance, double boundary, int dimensions)
 	: populationSize(size), mutateChance(mutateChance), boundary(boundary), dimensions(dimensions)
 {
+	ConfigInterpreter* config = ConfigInterpreter::getInstance("config.txt");
+	crossoverPercentage = config->getConfigValue(ConfigInterpreter::CROSSOVER);
+	bestPercentage = config->getConfigValue(ConfigInterpreter::BEST);
+	migrationSize = config->getConfigValue(ConfigInterpreter::MIGRATION);
+	sigma = config->getConfigValue(ConfigInterpreter::SIGMA);
 	Individual::boundary = boundary;
 	randomNumber = RandomNumber::getInstance();
 	generatePopulation();
@@ -16,10 +22,13 @@ Population::~Population()
 
 void Population::crossoverAll()
 {
+	int prefferedParents = populationSize*bestPercentage*4/100;
 	for (int i = 0; i < populationSize * crossoverPercentage/200; i = i + 2)
 	{
-		individuals.push_back(crossover(individuals[i], individuals[i + 1]));
-		individuals.push_back(crossover(individuals[i], individuals[i + 1]));
+		int a = randomNumber->randomInt(0, prefferedParents);
+		int b = randomNumber->randomInt(0, prefferedParents);
+		individuals.push_back(crossover(individuals[a], individuals[b]));
+		individuals.push_back(crossover(individuals[a], individuals[b]));
 
 	}
 	for (int i = 0; i < populationSize * crossoverPercentage/200; i = i + 2)
@@ -33,20 +42,17 @@ void Population::crossoverAll()
 
 std::shared_ptr<Individual> Population::crossover(const std::shared_ptr<Individual>& parent1, const std::shared_ptr<Individual>& parent2)
 {
-	double weight = randomNumber->randomDouble(0, 1);
 	std::vector<double> values;
-	double val;
-	int half = weight * dimensions;
 
-	for (int i = 0; i < half; ++i)
+	for (int i = 0; i < dimensions; ++i)
 	{
-		values.push_back(parent1->getValue(i));
+		int parentGene = randomNumber->randomInt(0, 1);
+		if (parentGene == 0)
+			values.push_back(parent1->getValue(i));
+		
+		else
+			values.push_back(parent2->getValue(i));
 	}
-	for (int i = half; i < dimensions; ++i)
-	{
-		values.push_back(parent2->getValue(i));
-	}
-
 
 	return std::make_shared<Individual>(values);
 }
@@ -60,11 +66,10 @@ void Population::killPredecessors()
 
 void Population::tryMutateAll()
 {
+	static double max;
 	std::random_device rd{};
 	std::mt19937 gen{ rd() };
-	std::normal_distribution<double> normal(0.0, 1);
-	double mutateOp = 0.1 * normal(gen);
-
+	std::normal_distribution<double> normal(0.0, sigma);
 	int numberOfIndividuals = individuals.size();
 	int number;
 	int position;
@@ -77,7 +82,7 @@ void Population::tryMutateAll()
 		position = randomNumber->randomInt(0, dimensions);
 		if (number <= mutateChance)
 		{
-			individuals[i]->mutate(mutateOp, j);
+			individuals[i]->mutate(normal(gen), j);
 		}
 	}
 }}
@@ -125,7 +130,8 @@ void Population::leaveBest()
 
 void Population::migration(std::shared_ptr<Population> other)
 {
-	int migration = randomNumber->randomInt(0, migrationSize);
+	int migrationCount = populationSize*migrationSize/1000;
+	int migration = randomNumber->randomInt(0, migrationCount);
 	int a;
 	int b;
 	for(int i=0; i<migration; ++i)

@@ -14,14 +14,21 @@ public:
 	static const std::string GENERATIONS;
 	static const std::string TO_CROSS;
 	static const std::string MUTATE;
+	static const std::string CROSSOVER;
+	static const std::string BEST;
+	static const std::string MIGRATION;
+	static const std::string SIGMA;
+	static const std::string MIGRATION_PERIOD;
 
-
-	ConfigInterpreter(std::string fileName);
+	static ConfigInterpreter* getInstance(std::string fileName);
 	int getConfigValue(const std::string& configName);
+	ConfigInterpreter(ConfigInterpreter& clone) = delete;
 private:
+	ConfigInterpreter(std::string fileName);
 	std::fstream file;
 	std::string fileName;
 	std::map<std::string, int> config;
+	static ConfigInterpreter* _instance;
 	void openFile();
 	void parseConfig();
 	std::pair<std::string, int> getSingleConfig(std::string line);

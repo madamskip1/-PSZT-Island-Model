@@ -5,18 +5,20 @@
 #include "RandomNumber.h"
 
 class Population
-{
-	static constexpr int crossoverPercentage{96};
-	static constexpr int bestPercentage{4};
-	static constexpr int migrationSize{1};
-	
-	
+{	
+
+		
 	std::vector<std::shared_ptr<Individual>> individuals;
-	int populationSize;
-	int mutateChance;
-	int dimensions;
-	double boundary;
-	RandomNumber* randomNumber;
+	int populationSize{0};
+	int mutateChance{0};
+	int dimensions{0};
+	double boundary{0};
+
+	int crossoverPercentage;
+	int bestPercentage;
+	int migrationSize;
+	double sigma;
+	RandomNumber* randomNumber{nullptr};
 
 public:
 	Population(int size, int mutateChance, double boundary, int dimensions);

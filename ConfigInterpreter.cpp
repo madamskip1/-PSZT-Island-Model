@@ -9,8 +9,22 @@ const std::string ConfigInterpreter::DIMENSIONS = "dimensions";
 const std::string ConfigInterpreter::BOUNDARY = "boundary";
 const std::string ConfigInterpreter::GENERATIONS = "generations";
 const std::string ConfigInterpreter::TO_CROSS = "tocross";
-const std::string ConfigInterpreter::MUTATE = "mutate_chance";
+const std::string ConfigInterpreter::MUTATE = "mutate_chance_per_mille";
+const std::string ConfigInterpreter::CROSSOVER = "crossover_percentage";
+const std::string ConfigInterpreter::BEST = "best_percentage";
+const std::string ConfigInterpreter::MIGRATION = "migration_per_mille";
+const std::string ConfigInterpreter::SIGMA = "sigma";
+const std::string ConfigInterpreter::MIGRATION_PERIOD = "migrationPeriod";
 
+ConfigInterpreter * ConfigInterpreter::_instance = nullptr;
+
+ConfigInterpreter* ConfigInterpreter::getInstance(std::string fileName)
+{
+	if(_instance == nullptr)
+		_instance = new ConfigInterpreter(fileName);
+
+	return _instance;
+}
 
 ConfigInterpreter::ConfigInterpreter(std::string fileName) : fileName(fileName)
 {
@@ -27,8 +41,6 @@ void ConfigInterpreter::openFile()
 	file.open(fileName, std::ios::in | std::ios::binary);
 	if (file.fail())
 	{
-		
-		// todo: wyj¹tek
 	}
 
 	parseConfig();

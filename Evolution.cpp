@@ -2,18 +2,18 @@
 #include "ConfigInterpreter.h"
 #include <iostream>
 
-
 Evolution::Evolution()
 {
-	config = new ConfigInterpreter("config.txt");
+	config = ConfigInterpreter::getInstance("config.txt");
 	maxGeneration = config->getConfigValue(ConfigInterpreter::GENERATIONS);
+	migrationPeriod = config->getConfigValue(ConfigInterpreter::MIGRATION_PERIOD);
+
 	generatePopulations();
 	run();
 }
 
 Evolution::~Evolution()
 {
-	delete config;
 }
 
 void Evolution::run()
@@ -27,7 +27,7 @@ void Evolution::run()
 
 	for (int generation = 1; generation <= maxGeneration; generation++)
 	{
-		if (generation % 25 == 0)
+		if (generation % 1 == 0)
 		{
 			std::cout<< "Generation: " << generation;
 			for(int i = 0; i < 2; ++i)
@@ -50,7 +50,7 @@ void Evolution::run()
 			tempPopulation->sortIndividuals();
 		}
 
-		if (generation % 5)
+		if (generation % migrationPeriod == 0)
 			MigrateAll();
 	}
 }

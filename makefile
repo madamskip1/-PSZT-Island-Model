@@ -1,25 +1,27 @@
 all: main.o Evolution.o Population.o ConfigInterpreter.o Individual.o RandomNumber.o
-	g++ main.o -g -o pszt Evolution.o Population.o ConfigInterpreter.o Individual.o RandomNumber.o
+	g++ ${FLAGS} main.o -g -o pszt Evolution.o Population.o ConfigInterpreter.o Individual.o RandomNumber.o
 
 main.o: main.cpp
-	g++ -c main.cpp 
+	g++ ${FLAGS} -c main.cpp 
 
 Evolution.o: Evolution.cpp Evolution.h Population.o ConfigInterpreter.o
-	g++ -c Evolution.cpp
+	g++ ${FLAGS} -c Evolution.cpp
 
 Population.o: Population.cpp Population.h Individual.o
-	g++ -c Population.cpp
+	g++ ${FLAGS} -c Population.cpp
 
 ConfigInterpreter.o: ConfigInterpreter.cpp ConfigInterpreter.h
-	g++ -c ConfigInterpreter.cpp
+	g++ ${FLAGS} -c ConfigInterpreter.cpp
 
 Individual.o: Individual.cpp Individual.h RandomNumber.o
-	g++ -c Individual.cpp
+	g++ ${FLAGS} -c Individual.cpp
 
 RandomNumber.o: RandomNumber.cpp RandomNumber.h
-	g++ -c RandomNumber.cpp
+	g++ ${FLAGS} -c RandomNumber.cpp
 
 
 clean:
 	rm -f *.o
 	rm pszt 
+
+FLAGS= -std=c++1z

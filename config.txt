@@ -1,6 +1,11 @@
 population_size=250
 generations=5000
 populations=8
-dimensions=30
-boundary=3
-mutate_chance=10
+dimensions=100
+boundary=5
+mutate_chance_per_mille=10
+crossover_percentage=96
+best_percentage=4
+migration_per_mille=2
+sigma=1
+migrationPeriod=50
