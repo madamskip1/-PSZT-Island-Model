@@ -25,15 +25,20 @@ void Evolution::run()
 	}
 	std::shared_ptr<Population> tempPopulation;
 
+	std::cout << 0 << ";"
+		<< populations[0]->getBestFitness() << ";"
+		<< populations[0]->getWorstFitness() << ";"
+		<< populations[1]->getBestFitness() << ";"
+		<< populations[1]->getWorstFitness() <<std::endl;
+
 	for (int generation = 1; generation <= maxGeneration; generation++)
 	{
 		if (generation % 10 == 0)
 		{
-			std::cout<< "Generation: " << generation;
 			for(int i = 0; i < 2; ++i)
 			{
-			std::cout   << ", Population: " <<i << ", best fit: "
-						<< populations[i]->getBestFitness() << ", worst fit: "
+			std::cout << generation << ";"
+						<< populations[i]->getBestFitness() << ";"
 						<< populations[i]->getWorstFitness();
 			}
 			std::cout<<std::endl;
@@ -59,7 +64,7 @@ void Evolution::generatePopulations()
 {
 	amountOfPopoulations = config->getConfigValue(ConfigInterpreter::POPULATIONS);
 	int populations_size = config->getConfigValue(ConfigInterpreter::POPOULATION_SIZE);
-	int boundary = config->getConfigValue(ConfigInterpreter::BOUNDARY);
+	double boundary = config->getConfigValue(ConfigInterpreter::BOUNDARY)/10;
 	int mutate = config->getConfigValue(ConfigInterpreter::MUTATE);
 	int dimensions = config->getConfigValue(ConfigInterpreter::DIMENSIONS);
 

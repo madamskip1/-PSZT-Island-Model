@@ -30,20 +30,21 @@ Population::~Population()
 
 void Population::crossoverAll()
 {
+	int bestParents = populationSize*bestPercentage/100;
 	int prefferedParents = populationSize*bestPercentage*4/100;
-	for (int i = 0; i < populationSize * crossoverPercentage/200; i = i + 2)
-	{
-		int a = randomNumber->randomInt(0, prefferedParents);
-		int b = randomNumber->randomInt(0, prefferedParents);
-		individuals.push_back(crossover(individuals[a], individuals[b]));
-		individuals.push_back(crossover(individuals[a], individuals[b]));
+	int quarterOfCrossoveredPopulation = populationSize * crossoverPercentage/400; 
 
+	for (int i = 0; i <= quarterOfCrossoveredPopulation; ++i)
+	{
+		int a = i;
+		int b = randomNumber->randomInt(0, bestParents);
+		individuals.push_back(crossover(individuals[a], individuals[b]));
 	}
-	for (int i = 0; i < populationSize * crossoverPercentage/200; i = i + 2)
+
+	for (int i = 0; i <= quarterOfCrossoveredPopulation*3; ++i)
 	{
 		int a = randomNumber->randomInt(0, populationSize);
 		int b = randomNumber->randomInt(populationSize/2, populationSize);
-		individuals.push_back(crossover(individuals[a], individuals[b]));
 		individuals.push_back(crossover(individuals[a], individuals[b]));
 	}
 }
@@ -85,15 +86,16 @@ void Population::tryMutateAll()
 	for (int i = 0; i < numberOfIndividuals; ++i)
 	{
 		for (int j = 0; j < dimensions; ++j)
-	{
-		number = randomNumber->randomInt(0, 1000);
-		position = randomNumber->randomInt(0, dimensions);
-		if (number <= mutateChance)
 		{
-			individuals[i]->mutate(normal(gen), j);
+			number = randomNumber->randomInt(0, 1000);
+			position = randomNumber->randomInt(0, dimensions);
+			if (number < mutateChance)
+			{
+				individuals[i]->mutate(normal(gen), j);
+			}
 		}
 	}
-}}
+}
 
 double Population::getBestFitness()
 {
@@ -130,7 +132,8 @@ void Population::sortIndividuals()
 
 void Population::leaveBest()
 {
-	for (int i = 0; i < populationSize * bestPercentage/100; ++i)
+	int leave = populationSize * bestPercentage/100;
+	for (int i = 0; i < leave; ++i)
 	{
 		individuals.push_back(std::make_shared<Individual>(individuals[i]->getValues()));
 	}
