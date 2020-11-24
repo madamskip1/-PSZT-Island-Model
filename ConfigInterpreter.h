@@ -12,7 +12,6 @@ public:
 	static const std::string DIMENSIONS;
 	static const std::string BOUNDARY;
 	static const std::string GENERATIONS;
-	static const std::string TO_CROSS;
 	static const std::string MUTATE;
 	static const std::string CROSSOVER;
 	static const std::string BEST;
@@ -23,12 +22,14 @@ public:
 	static ConfigInterpreter* getInstance(std::string fileName);
 	int getConfigValue(const std::string& configName);
 	ConfigInterpreter(ConfigInterpreter& clone) = delete;
+	
 private:
-	ConfigInterpreter(std::string fileName);
 	std::fstream file;
 	std::string fileName;
 	std::map<std::string, int> config;
 	static ConfigInterpreter* _instance;
+	
+	ConfigInterpreter(std::string fileName);
 	void openFile();
 	void parseConfig();
 	std::pair<std::string, int> getSingleConfig(std::string line);

@@ -27,7 +27,7 @@ void Evolution::run()
 
 	for (int generation = 1; generation <= maxGeneration; generation++)
 	{
-		if (generation % 1 == 0)
+		if (generation % 10 == 0)
 		{
 			std::cout<< "Generation: " << generation;
 			for(int i = 0; i < 2; ++i)
@@ -85,6 +85,9 @@ void Evolution::MigrateAll()
 		populations[i]->migration(populations[i - 1]);
 	}
 
-	populations[1]->migration(populations[amountOfPopoulations - 1]);
-	populations[amountOfPopoulations - 1]->migration(populations[1]);
+	if(amountOfPopoulations != 2)
+	{
+		populations[1]->migration(populations[amountOfPopoulations - 1]);
+		populations[amountOfPopoulations - 1]->migration(populations[1]);
+	}
 }

@@ -3,14 +3,22 @@
 #include <algorithm>
 #include <iostream>
 
+int Population::crossoverPercentage{0};
+int Population::bestPercentage{0};
+int Population::migrationSize{0};
+double Population::sigma{0};
+
 Population::Population(int size, int mutateChance, double boundary, int dimensions)
 	: populationSize(size), mutateChance(mutateChance), boundary(boundary), dimensions(dimensions)
 {
-	ConfigInterpreter* config = ConfigInterpreter::getInstance("config.txt");
-	crossoverPercentage = config->getConfigValue(ConfigInterpreter::CROSSOVER);
-	bestPercentage = config->getConfigValue(ConfigInterpreter::BEST);
-	migrationSize = config->getConfigValue(ConfigInterpreter::MIGRATION);
-	sigma = config->getConfigValue(ConfigInterpreter::SIGMA);
+	if(bestPercentage == 0 && crossoverPercentage == 0)
+	{
+		ConfigInterpreter* config = ConfigInterpreter::getInstance("config.txt");
+		crossoverPercentage = config->getConfigValue(ConfigInterpreter::CROSSOVER);
+		bestPercentage = config->getConfigValue(ConfigInterpreter::BEST);
+		migrationSize = config->getConfigValue(ConfigInterpreter::MIGRATION);
+		sigma = static_cast<double>(config->getConfigValue(ConfigInterpreter::SIGMA))/10;
+	}
 	Individual::boundary = boundary;
 	randomNumber = RandomNumber::getInstance();
 	generatePopulation();
@@ -134,7 +142,7 @@ void Population::migration(std::shared_ptr<Population> other)
 	int migration = randomNumber->randomInt(0, migrationCount);
 	int a;
 	int b;
-	for(int i=0; i<migration; ++i)
+	for(int i=0; i < migration; ++i)
 	{
 		a = randomNumber->randomInt(0, populationSize-1);
 		b = randomNumber->randomInt(bestPercentage*populationSize/100, populationSize-1);
