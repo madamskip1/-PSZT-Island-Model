@@ -34,7 +34,7 @@ void Population::crossoverAll()
 	int prefferedParents = populationSize*bestPercentage*4/100;
 	int quarterOfCrossoveredPopulation = populationSize * crossoverPercentage/400; 
 
-	for (int i = 0; i <= quarterOfCrossoveredPopulation; ++i)
+	for (int i = 0; i <= quarterOfCrossoveredPopulation+1; ++i)
 	{
 		int a = i;
 		int b = randomNumber->randomInt(0, bestParents);
@@ -44,7 +44,7 @@ void Population::crossoverAll()
 	for (int i = 0; i <= quarterOfCrossoveredPopulation*3; ++i)
 	{
 		int a = randomNumber->randomInt(0, populationSize);
-		int b = randomNumber->randomInt(populationSize/2, populationSize);
+		int b = randomNumber->randomInt(populationSize/2, populationSize-1);
 		individuals.push_back(crossover(individuals[a], individuals[b]));
 	}
 }

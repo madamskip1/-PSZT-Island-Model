@@ -70,9 +70,14 @@ void Evolution::generatePopulations()
 
 	std::shared_ptr<Population> temp;
 
-	for (int i = 0; i < amountOfPopoulations; i++)
+	temp = std::make_shared<Population>(populations_size, mutate, boundary, dimensions);
+	populations.push_back(temp);
+
+	int islandPopulation = populations_size/(amountOfPopoulations-1);
+
+	for (int i = 1; i < amountOfPopoulations; i++)
 	{
-		temp = std::make_shared<Population>(populations_size, mutate, boundary, dimensions);
+		temp = std::make_shared<Population>(islandPopulation, mutate, boundary, dimensions);
 		populations.push_back(temp);
 	}
 }

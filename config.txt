@@ -1,11 +1,11 @@
-population_size=100
+population_size=10000
 generations=10000
-populations=11
+populations=9
 dimensions=100
 deciboundary=52
-mutate_chance_per_mille=10
+mutate_chance_per_mille=100
 crossover_percentage=90
 best_percentage=10
-migration_per_mille=20
+migration_per_mille=1
 decisigma=1
-migrationPeriod=50
+migrationPeriod=250
