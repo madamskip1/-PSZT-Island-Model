@@ -17,8 +17,9 @@ Population::Population(int size, int mutateChance, double boundary, int dimensio
 		crossoverPercentage = config->getConfigValue(ConfigInterpreter::CROSSOVER);
 		bestPercentage = config->getConfigValue(ConfigInterpreter::BEST);
 		migrationSize = config->getConfigValue(ConfigInterpreter::MIGRATION);
-		sigma = static_cast<double>(config->getConfigValue(ConfigInterpreter::SIGMA))/10;
+		sigma = static_cast<double>(config->getConfigValue(ConfigInterpreter::SIGMA)) / 10;
 	}
+
 	Individual::boundary = boundary;
 	randomNumber = RandomNumber::getInstance();
 	generatePopulation();
@@ -30,22 +31,38 @@ Population::~Population()
 
 void Population::crossoverAll()
 {
-	int bestParents = populationSize*bestPercentage/100;
-	int prefferedParents = populationSize*bestPercentage*4/100;
-	int quarterOfCrossoveredPopulation = populationSize * crossoverPercentage/400; 
+	int bestParents = populationSize * bestPercentage / 100;
+	int prefferedParents = populationSize * bestPercentage * 4 / 100;
+	int quarterOfCrossoveredPopulation = populationSize * crossoverPercentage / 400; 
 
-	for (int i = 0; i <= quarterOfCrossoveredPopulation+1; ++i)
+
+	firstQuarterCrossover(bestParents, quarterOfCrossoveredPopulation);
+	secondQuarterCrossover(quarterOfCrossoveredPopulation);
+}
+
+void Population::firstQuarterCrossover(const int& bestParents, const int& quarterPopulation)
+{
+	int parentA;
+	int parentB;
+
+	for (int i = 0; i <= quarterPopulation + 1; i++)
 	{
-		int a = i;
-		int b = randomNumber->randomInt(0, bestParents);
-		individuals.push_back(crossover(individuals[a], individuals[b]));
+		parentA = i;
+		parentB = randomNumber->randomInt(0, bestParents);
+		individuals.push_back(crossover(individuals[parentA], individuals[parentB]));
 	}
+}
 
-	for (int i = 0; i <= quarterOfCrossoveredPopulation*3; ++i)
+void Population::secondQuarterCrossover(const int& quarterPopulation)
+{
+	int parentA;
+	int parentB;
+
+	for (int i = 0; i <= quarterPopulation * 3; ++i)
 	{
-		int a = randomNumber->randomInt(0, populationSize);
-		int b = randomNumber->randomInt(populationSize/2, populationSize-1);
-		individuals.push_back(crossover(individuals[a], individuals[b]));
+		parentA = randomNumber->randomInt(0, populationSize);
+		parentB = randomNumber->randomInt(populationSize / 2, populationSize - 1);
+		individuals.push_back(crossover(individuals[parentA], individuals[parentB]));
 	}
 }
 
@@ -87,7 +104,7 @@ void Population::tryMutateAll()
 	{
 		for (int j = 0; j < dimensions; ++j)
 		{
-			number = randomNumber->randomInt(0, 1000);
+			number = randomNumber->randomInt(0, 1000); // promile
 			position = randomNumber->randomInt(0, dimensions);
 			if (number < mutateChance)
 			{
@@ -132,7 +149,7 @@ void Population::sortIndividuals()
 
 void Population::leaveBest()
 {
-	int leave = populationSize * bestPercentage/100;
+	int leave = populationSize * bestPercentage / 100;
 	for (int i = 0; i < leave; ++i)
 	{
 		individuals.push_back(std::make_shared<Individual>(individuals[i]->getValues()));
@@ -141,15 +158,16 @@ void Population::leaveBest()
 
 void Population::migration(std::shared_ptr<Population> other)
 {
-	int migrationCount = populationSize*migrationSize/1000;
+	int migrationCount = populationSize * migrationSize / 1000;
 	int migration = randomNumber->randomInt(0, migrationCount);
-	int a;
-	int b;
-	for(int i=0; i < migration; ++i)
+	int individualA;
+	int individualB;
+
+	for(int i = 0; i < migration; ++i)
 	{
-		a = randomNumber->randomInt(0, populationSize-1);
-		b = randomNumber->randomInt(bestPercentage*populationSize/100, populationSize-1);
-		individuals[a]->setValues(other->getIndividual(b)->getValues());
+		individualA = randomNumber->randomInt(0, populationSize-1);
+		individualB = randomNumber->randomInt(bestPercentage * populationSize / 100, populationSize-1);
+		individuals[individualA]->setValues(other->getIndividual(individualB)->getValues());
 	}
 }
 

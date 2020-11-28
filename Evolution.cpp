@@ -19,17 +19,23 @@ Evolution::~Evolution()
 void Evolution::run()
 {
 	int populationsSize = populations.size();
+
 	for(auto& population : populations)
 	{
 		population->sortIndividuals();
 	}
+
 	std::shared_ptr<Population> tempPopulation;
 
-	std::cout << 0 << ";"
-		<< populations[0]->getBestFitness() << ";"
-		<< populations[0]->getWorstFitness() << ";"
-		<< populations[1]->getBestFitness() << ";"
-		<< populations[1]->getWorstFitness() <<std::endl;
+	std::cout << 0 << ";";
+
+	// klasyczny alogrytm ewolucyjny - wyspa (0)
+	std::cout << populations[0]->getBestFitness() << ";"
+				<< populations[0]->getWorstFitness() << ";";
+	
+	// Model wyspowy - pierwsza wyspa 
+	std::cout << populations[1]->getBestFitness() << ";"
+				<< populations[1]->getWorstFitness() <<std::endl;
 
 	for (int generation = 1; generation <= maxGeneration; generation++)
 	{
@@ -37,11 +43,13 @@ void Evolution::run()
 		{
 			for(int i = 0; i < 2; ++i)
 			{
-			std::cout << generation << ";"
+				// Klasyczny model ewolucyjny i pierwsza populacja modelu wyspowego
+				std::cout << generation << ";"
 						<< populations[i]->getBestFitness() << ";"
 						<< populations[i]->getWorstFitness();
 			}
-			std::cout<<std::endl;
+
+			std::cout << std::endl;
 		}
 
 		for (int population = 0; population < populationsSize; population++)
@@ -56,7 +64,9 @@ void Evolution::run()
 		}
 
 		if (generation % migrationPeriod == 0)
+		{
 			MigrateAll();
+		}
 	}
 }
 
@@ -73,7 +83,7 @@ void Evolution::generatePopulations()
 	temp = std::make_shared<Population>(populations_size, mutate, boundary, dimensions);
 	populations.push_back(temp);
 
-	int islandPopulation = populations_size/(amountOfPopoulations-1);
+	int islandPopulation = populations_size/(amountOfPopoulations - 1);
 
 	for (int i = 1; i < amountOfPopoulations; i++)
 	{
@@ -85,6 +95,7 @@ void Evolution::generatePopulations()
 void Evolution::MigrateAll()
 {
 	int indexTo;
+
 	for (int i = 1; i < amountOfPopoulations - 1; i++)
 	{
 		populations[i]->migration(populations[i + 1]);

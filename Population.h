@@ -35,6 +35,8 @@ private:
 	std::shared_ptr<Individual> crossover(const std::shared_ptr<Individual>& parent1, const std::shared_ptr<Individual>& parent2);
 	std::shared_ptr<Individual> generateIndividual();
 	std::shared_ptr<Individual> getIndividual(int position);
+	void firstQuarterCrossover(const int& bestParents, const int& quarterPopulation);
+	void secondQuarterCrossover(const int& quarterPopulation);
 };
 
 
